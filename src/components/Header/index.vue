@@ -64,7 +64,8 @@ export default {
         }
       }
       // this.$router.push('/search'); //
-      this.$router.push(location).catch(() => {});
+      // this.$router.push(location).catch(() => {}); // 不能一劳永逸
+      this.$router.push(location);
     }
   }
 };

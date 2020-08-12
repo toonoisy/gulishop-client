@@ -10,7 +10,7 @@ export default [
     component: Home,
   },
   {
-    path: '/search:keyword?', // params参数需要接收，'?'代表params可传可不传
+    path: '/search/:keyword?', // params参数需要接收，'?'代表params可传可不传
     component: Search,
     name: 'search',
     // props: true, // 把params当作属性传给相应的组件

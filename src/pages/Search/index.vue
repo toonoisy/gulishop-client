@@ -1,10 +1,11 @@
 <template>
   <div>
-    Search
+    <!-- Search -->
     <!-- params: {{$route.params.keyword}} -->
-    params: {{keyword}}
+    <!-- params: {{keyword}} -->
     <!-- query: {{$route.query.keyword}} -->
-    query: {{keyword2}}
+    <!-- query: {{keyword2}} -->
+    <TypeNav></TypeNav>
   </div>
 </template>
 
