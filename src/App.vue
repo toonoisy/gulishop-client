@@ -11,6 +11,15 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 export default {
   name: 'App',
+  mounted() {
+    // this.$store.dispatch('getCatagoryList');
+    this.getCatagoryList();
+  },
+  methods: {
+    getCatagoryList() {
+      this.$store.dispatch("getCatagoryList");
+    },
+  },
   components: {
     Header,
     Footer,

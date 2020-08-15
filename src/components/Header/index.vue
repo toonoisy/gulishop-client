@@ -59,10 +59,15 @@ export default {
           // 如果直接传空串，路径会出问题
           keyword: this.keyword || undefined,  // undefined代表什么都不传
         },
-        query: {
-          keyword: this.keyword.toUpperCase(),
-        }
+        // query: {
+        //   keyword: this.keyword.toUpperCase(),
+        // }
       }
+
+      if (this.$route.query) {
+        location.query = this.$route.query;
+      }
+
       // this.$router.push('/search'); //
       // this.$router.push(location).catch(() => {}); // 不能一劳永逸
       this.$router.push(location);

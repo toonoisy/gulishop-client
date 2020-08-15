@@ -2,12 +2,13 @@
   <div class="list-container">
     <div class="sortList clearfix">
       <div class="center">
+        <Carousel :bannerList='bannerList'></Carousel>
         <!--banner轮播-->
-        <div class="swiper-container" id="mySwiper">
+        <!-- <div class="swiper-container" ref="banner">
           <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <img src="./images/banner1.jpg" />
-            </div>
+            <div class="swiper-slide" v-for="banner in bannerList" :key="banner.id">
+              <img :src="banner.imgUrl" />
+            </div> -->
             <!-- <div class="swiper-slide">
               <img src="./images/banner2.jpg" />
             </div>
@@ -17,14 +18,11 @@
             <div class="swiper-slide">
               <img src="./images/banner4.jpg" />
             </div> -->
-          </div>
-          <!-- 如果需要分页器 -->
+          <!-- </div>
           <div class="swiper-pagination"></div>
-
-          <!-- 如果需要导航按钮 -->
           <div class="swiper-button-prev"></div>
           <div class="swiper-button-next"></div>
-        </div>
+        </div> -->
       </div>
       <div class="right">
         <div class="news">
@@ -110,8 +108,62 @@
 </template>
 
 <script>
+// import Swiper from 'swiper';
+import { mapState } from 'vuex';
 export default {
   name: "ListContainer",
+  mounted() {
+    this.$store.dispatch('getBannerList');
+    // swiper必须在html结构显示完成后创建才会生效，在mounted里实例化不合适
+
+    // new Swiper (this.$refs.banner, {
+    //   loop: true, // 循环模式选项      
+    //   // 如果需要分页器
+    //   pagination: {
+    //     el: '.swiper-pagination',
+    //   },
+    //   // 如果需要前进后退按钮
+    //   navigation: {
+    //     nextEl: '.swiper-button-next',
+    //     prevEl: '.swiper-button-prev',
+    //   },
+    // })
+  },
+  computed: {
+    ...mapState({
+      bannerList: state => state.home.bannerList,
+    }),
+  },
+  // 如果想要的数据没有，就用computed去计算，有就用watch去监视
+  // watch: {
+  //   immediate: true, // 即使数据不改变，也能让回调执行一次（虽然这里没卵用，但是轮播功能代码一致了）
+  //   bannerList: {
+  //     handler(newVal, oldVal) {
+  //     /* 
+  //       watch一旦监视到数据变化就去实例化，不给v-for时间，太快了
+  //       最终方案：watch + nextTick
+  //       nextTick: 等待页面最近一次更新完成，会调用它内部的回调
+  //         dom元素还未形成，但数据想往上面更新，就用nextTick
+  //           this.$nextTick() / Vue.nextTick() 都可
+  //     */
+  //       this.$nextTick(() => {
+  //         new Swiper (this.$refs.banner, {
+  //           // autoplay: true,
+  //           loop: true, // 循环模式选项      
+  //           // 如果需要分页器
+  //           pagination: {
+  //             el: '.swiper-pagination',
+  //           },
+  //           // 如果需要前进后退按钮
+  //           navigation: {
+  //             nextEl: '.swiper-button-next',
+  //             prevEl: '.swiper-button-prev',
+  //           },
+  //         });
+  //       })
+  //     },
+  //   },
+  // },
 };
 </script>
 

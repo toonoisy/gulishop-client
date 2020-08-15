@@ -15,12 +15,12 @@ export default [
     name: 'search',
     // props: true, // 把params当作属性传给相应的组件
     // props: {}, // 对象形式，用于额外传递静态数据，几乎不用
-    props(route) { // route 收集好参数的对象
-      return {
-        keyword: route.params.keyword,
-        keyword2: route.query.keyword,
-      }
-    }, // 把params和query一起映射为组件属性
+    // props(route) { // route 收集好参数的对象
+    //   return {
+    //     keyword: route.params.keyword,
+    //     keyword2: route.query.keyword,
+    //   }
+    // }, // 把params和query一起映射为组件属性
   },
   {
     path: '/login',
