@@ -118,7 +118,13 @@ export default {
             location.params = this.$route.params;
         };
 
-        this.$router.push(location);
+        if (this.$route.path === '/search') {
+          this.$router.replace(location);
+        } else {
+          this.$router.push(location);
+        }
+
+        // this.$router.push(location);
       }
     },
     moveOutDiv() {

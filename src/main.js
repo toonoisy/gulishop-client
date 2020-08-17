@@ -4,7 +4,8 @@ import router from '@/router';
 import store from '@/store';
 import '@/mock/mockServer';
 import 'swiper/css/swiper.css'; // 公共css样式放main
-// import '@/api'; // 测试用
+
+import '@/api'; // 测试用
 
 import TypeNav from '@/components/TypeNav';
 import Carousel from '@/components/Carousel';

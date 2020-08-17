@@ -40,7 +40,7 @@ export default {
         this.$nextTick(() => {
           new Swiper (this.$refs.banner, {
             autoplay: true,
-            // loop: true, // 循环模式选项      
+            loop: true, // 循环模式选项      
             // 如果需要分页器
             pagination: {
               el: '.swiper-pagination',

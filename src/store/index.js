@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import home from './home';
 import user from './user';
+import search from './search';
 
 Vue.use(Vuex);
 
@@ -18,6 +19,7 @@ export default new Vuex.Store({
   // 将小的store合并进总的store
   modules: {
     home,
-    user
+    user,
+    search,
   }
 });

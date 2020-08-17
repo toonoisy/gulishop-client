@@ -10,7 +10,6 @@ export const reqCatagoryList = () => {
     method: 'GET',
   });
 };
-
 // reqCatagoryList();
 
 // 请求banner和floor mock的数据
@@ -26,3 +25,18 @@ export const reqFloorList = () => {
     method: 'GET', // mock的数据都是get请求
   });
 };
+
+/* 
+  searchParams 搜索参数，必须要有(不传报201，参数有问题)，至少是一个没有属性的空对象，由组件传递
+  - 如果是空对象：搜索请求获取的是全部数据
+  - 如果有搜索条件：代表搜索条件匹配的对象
+*/
+export const reqGoodsListInfo = (searchParams) => {
+  return Ajax({
+    url: '/list',
+    method: 'POST',
+    // 请求体参数
+    data: searchParams,
+  });
+}
+// reqGoodsListInfo({}); // 不传参报201
