@@ -2,6 +2,7 @@ import Home from '@/pages/Home';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import Search from '@/pages/Search';
+import Detail from '@/pages/Detail';
 
 export default [
   // 专门配置各种路由（路径和组件之间都映射关系）
@@ -39,6 +40,10 @@ export default [
   {
     path: '/',
     redirect: '/home',
-  }
+  },
+  {
+    path: '/detail/:skuId',
+    component: Detail,
+  },
 
 ]; // 复数都是定义数组

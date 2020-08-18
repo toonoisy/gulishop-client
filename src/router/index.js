@@ -18,7 +18,10 @@ VueRouter.prototype.push = function(location, onResolved, onRejected) {
 // 向外暴露一个路由器对象(管理多个路由)
 const router = new VueRouter({
   // mode: 'history',
-  routes
+  routes,
+  scrollBehavior (to, from, savedPosition) {
+    return { x: 0, y: 0 }
+  },
 });
 
 export default router;

@@ -40,3 +40,10 @@ export const reqGoodsListInfo = (searchParams) => {
   });
 }
 // reqGoodsListInfo({}); // 不传参报201
+
+export const reqGoodsDetailInfo = (skuId) => {
+  return Ajax({
+    url: `/item/${skuId}`,
+    method: 'GET',
+  });
+}

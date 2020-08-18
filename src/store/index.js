@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import home from './home';
 import user from './user';
 import search from './search';
+import detail from './detail';
 
 Vue.use(Vuex);
 
@@ -21,5 +22,6 @@ export default new Vuex.Store({
     home,
     user,
     search,
+    detail,
   }
 });

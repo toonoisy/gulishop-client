@@ -48,6 +48,9 @@ export default {
       keyword: ''
     }
   },
+  mounted() {
+    this.$bus.$on('clearKeyword', this.clearKeyword);
+  },
   methods: {
     // 编程式导航性能比<router-link></router-link>好
     toSearch() {
@@ -71,6 +74,9 @@ export default {
       // this.$router.push('/search'); //
       // this.$router.push(location).catch(() => {}); // 不能一劳永逸
       this.$router.push(location);
+    },
+    clearKeyword() {
+      this.keyword = '';
     }
   }
 };

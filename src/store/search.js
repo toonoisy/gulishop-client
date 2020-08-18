@@ -10,7 +10,7 @@ const mutations = {
 };
 const actions = {
   async getGoodsListInfo({commit}, searchParams) {
-    // 通过dispatch传参时，第一个参数是context对象
+    // 通过dispatch去调用的函数，第一个参数是context对象
     // 从第二个参数起，传递多个参数时要保存在对象中传递，只一个参数不需要
     const result = await reqGoodsListInfo(searchParams);
     if (result.code === 200) {
