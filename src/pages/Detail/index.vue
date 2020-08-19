@@ -16,9 +16,9 @@
         <!-- 左侧放大镜区域 -->
         <div class="previewWrap">
           <!--放大镜效果-->
-          <Zoom />
+          <Zoom :imgList='imgList' />
           <!-- 小图列表 -->
-          <ImageList />
+          <ImageList :imgList='imgList' />
         </div>
         <!-- 右侧选择区域布局 -->
         <div class="InfoWrap">
@@ -69,20 +69,26 @@
                 <dt class="title">{{spuSaleAttr.saleAttrName}}</dt>
                 <dd
                   changepirce="0"
-                  class="active"
+                  :class="{active: spuSaleAttrValue.isChecked === '1'}"
                   v-for="spuSaleAttrValue in spuSaleAttr.spuSaleAttrValueList"
                   :key="spuSaleAttrValue.id"
+                  @click="changeIsChecked(spuSaleAttr.spuSaleAttrValueList, spuSaleAttrValue)"
                 >{{spuSaleAttrValue.saleAttrValueName}}</dd>
               </dl>
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" />
-                <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <!-- 文本框输入的一概是字符串，而点+-是数字 -->
+                <input autocomplete="off" class="itxt" v-model="skuNum" /> 
+                <a href="javascript:" class="plus" @click="skuNum++">+</a>
+                <a href="javascript:" class="mins" @click="skuNum > 1 ? skuNum-- : skuNum = 1">-</a>
               </div>
               <div class="add">
-                <a href="javascript:">加入购物车</a>
+                <!-- 
+                  不能用声明式导航
+                  因为不是直接跳转，而是现在详情页发请求给后台，后台返回成功数据后才手动push到添加成功页面 
+                -->
+                <a href="javascript:" @click="addShopCart">加入购物车</a>
               </div>
             </div>
           </div>
@@ -327,6 +333,11 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "Detail",
+  data() {
+    return {
+      skuNum: 1
+    }
+  },
   mounted() {
     this.getGoodsDetailInfo();
   },
@@ -334,9 +345,34 @@ export default {
     getGoodsDetailInfo() {
       this.$store.dispatch("getGoodsDetailInfo", this.$route.params.skuId);
     },
+    // 排它
+    changeIsChecked(attrValueList, attrValue) {
+      attrValueList.forEach(item => {
+        item.isChecked = '0';
+      });
+      attrValue.isChecked = '1';
+    },
+    async addShopCart() {
+      // 先发请求给后台
+      try {
+        await this.$store.dispatch('addOrUpdateCart', {skuId:this.skuInfo.id, skuNum:this.skuNum});
+        alert('添加购物车成功，页面将自动跳转');
+        // 传递大的数据，用存储方案解决，不要用路由传递
+        // 先主动转成json字符串，免得被转字符串变成{object, object}
+        sessionStorage.setItem('SKUINFO_KEY', JSON.stringify(this.skuInfo));
+        // 通过路由传商品数量（小的数据）
+        this.$router.push(`/addCartSuccess?skuNum=${this.skuNum}`);
+      } catch (err) {
+        alert(err.message);
+      }
+      // 后台返回添加结果
+    },
   },
   computed: {
     ...mapGetters(["categoryView", "skuInfo", "spuSaleAttrList"]),
+    imgList() {
+      return this.skuInfo.skuImageList || [];
+    }
   },
   components: {
     ImageList,

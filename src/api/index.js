@@ -47,3 +47,20 @@ export const reqGoodsDetailInfo = (skuId) => {
     method: 'GET',
   });
 }
+
+// 请求添加/修改购物车
+export const reqAddOrUpdateCart = (skuId, skuNum) => {
+  return Ajax({
+    url: `/cart/addToCart/${ skuId }/${ skuNum }`, // 请求路径
+    method: 'POST',
+  })
+}
+
+export const reqShopCartList = () => {
+  return Ajax({
+    url: '/cart/cartList',
+    method: 'GET',
+  });
+}
+// 对象写法
+// export const reqShopCartList = () => Ajax.get('/cart/cartList');

@@ -1,8 +1,8 @@
 <template>
-  <div class="swiper-container">
+  <div class="swiper-container" ref="imgList">
     <div class="swiper-wrapper">
-      <div class="swiper-slide">
-        <img src="../images/s1.png">
+      <div class="swiper-slide" v-for="(img, index) in imgList" :key="img.id">
+        <img :src="img.imgUrl" :class="{active: index === defaultIndex}" @click="changeDefaultIndex(index)">
       </div>
     </div>
     <div class="swiper-button-next"></div>
@@ -11,10 +11,47 @@
 </template>
 
 <script>
-
   import Swiper from 'swiper'
   export default {
     name: "ImageList",
+    props: ['imgList'],
+    data() {
+      return {
+        defaultIndex: 0,
+      }
+    },
+    methods: {
+      changeDefaultIndex(index) {
+        this.defaultIndex = index; // 为了切换缩略图active类
+        this.$bus.$emit('changeDefaultIndex', index);
+      }
+    },
+    watch: {
+      imgList: {
+        immediate: true, // 即使数据不改变，也能让回调执行一次（虽然这里没卵用，但是轮播功能代码一致了）
+        handler(newVal, oldVal) {
+        /* 
+          watch一旦监视到数据变化就去实例化，不给v-for时间，太快了
+          最终方案：watch + nextTick
+          nextTick: 等待页面最近一次更新完成，会调用它内部的回调
+            dom元素还未形成，但数据想往上面更新，就用nextTick
+              this.$nextTick() / Vue.nextTick() 都可
+        */
+          this.$nextTick(() => {
+            new Swiper (this.$refs.imgList, {
+              // autoplay: true,
+              slidesPerView : 5,
+              slidesPerGroup : 5,
+              loop: true, // 循环模式选项      
+              navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+              },
+            });
+          })
+        },
+      },
+    },
   }
 </script>
 
@@ -43,10 +80,10 @@
           padding: 1px;
         }
 
-        &:hover {
-          border: 2px solid #f60;
-          padding: 1px;
-        }
+        // &:hover {
+        //   border: 2px solid #f60;
+        //   padding: 1px;
+        // }
       }
     }
 

@@ -1,17 +1,68 @@
 <template>
   <div class="spec-preview">
-    <img src="../images/s1.png" />
-    <div class="event"></div>
+    <!-- 
+      a.b.c假报错：
+      数据的传递和接收都需要计算时间，刚开始可能是个空的，所以出现报错，但数据真正拿到后页码又正常渲染了
+      解决：把较复杂但属性a.b先算出来
+    -->
+    <img :src="defaultImg.imgUrl" />
+    <!-- 移动时承载事件的div -->
+    <div class="event" @mousemove="move"></div> 
     <div class="big">
-      <img src="../images/s1.png" />
+      <img :src="defaultImg.imgUrl" ref='bigImg'/>
     </div>
-    <div class="mask"></div>
+    <div class="mask" ref='mask'></div>
   </div>
 </template>
 
 <script>
   export default {
     name: "Zoom",
+    props: ['imgList'],
+    mounted() {
+      this.$bus.$on('changeDefaultIndex', this.changeDefaultIndex);
+    },
+    data() {
+      return {
+        defaultIndex: 0, // 默认下标 带橙色边框
+      }
+    },
+    methods: {
+      changeDefaultIndex(index) {
+        this.defaultIndex = index; // 为了切换缩略图对应小图
+      },
+      move(event) {
+        let mask = this.$refs.mask;
+        let bigImg = this.$refs.bigImg;
+        // client 相对于视口 page 页面 offset 元素本身
+        // 鼠标位置
+        let mouseX = event.offsetX;
+        let mouseY = event.offsetY;
+        // 蒙板位置（左上）
+        let maskX = mouseX - mask.offsetWidth / 2; // offsetWidth 带边框 clientWidth 不带
+        let maskY = mouseY - mask.offsetHeight / 2;
+        if(maskX < 0) {
+          maskX = 0;
+        } else if(maskX > mask.offsetWidth) {
+          maskX = mask.offsetWidth;
+        }
+        if(maskY < 0) {
+          maskY = 0;
+        } else if(maskY > mask.offsetHeight) {
+          maskY = mask.offsetHeight;
+        }
+        mask.style.left = maskX + 'px';
+        mask.style.top = maskY + 'px';
+        bigImg.style.left = -2 * maskX + 'px';
+        bigImg.style.top = -2 * maskY + 'px';
+
+      },
+    },
+    computed: {
+      defaultImg() {
+        return this.imgList[this.defaultIndex] || {}; // 如果拿不到，{}备胎
+      }
+    },
   }
 </script>
 

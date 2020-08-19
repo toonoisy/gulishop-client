@@ -1,6 +1,7 @@
 // 发送ajax请求模块，目的是对axios进行二次封装
 import axios from 'axios';
 import NProgress from 'nprogress';
+import store from '@/store';
 import 'nprogress/nprogress.css';
 
 // 配置基础路径和超时限制
@@ -12,6 +13,9 @@ const instance = axios.create({
 instance.interceptors.request.use(config => {
   NProgress.start();
   // 处理config：请求报文/添加额外功能（进度条）
+  // 把userTempId添加到每次请求的请求头中
+  let userTempId = store.state.user.userTempId;
+  config.headers.userTempId = userTempId;
   return config; // 返回这个config再继续请求，发送对报文信息就是新的config对象
 }); // 内部不涉及this直接用箭头
 

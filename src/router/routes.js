@@ -3,6 +3,8 @@ import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import Search from '@/pages/Search';
 import Detail from '@/pages/Detail';
+import AddCartSuccess from '@/pages/AddCartSuccess';
+import ShopCart from '@/pages/ShopCart';
 
 export default [
   // 专门配置各种路由（路径和组件之间都映射关系）
@@ -42,8 +44,16 @@ export default [
     redirect: '/home',
   },
   {
-    path: '/detail/:skuId',
+    path: '/detail/:skuId', // 选择一个skuId页面去跳转
     component: Detail,
+  },
+  {
+    path: '/addcartsuccess', // 前台路由，切换组件
+    component: AddCartSuccess,
+  },
+  {
+    path: '/shopcart', // 前台路由，切换组件
+    component: ShopCart,
   },
 
 ]; // 复数都是定义数组

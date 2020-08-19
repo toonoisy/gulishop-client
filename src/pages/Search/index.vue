@@ -93,7 +93,7 @@
                     </strong>
                   </div>
                   <div class="attr">
-                    <router-link to="`/detail/${goods.id}`">
+                    <router-link :to="`/detail/${goods.id}`">
                       {{goods.title}}
                     </router-link>
                     <!-- <a target="_blank" href="item.html" title="促销信息，下单即赠送三个月CIBN视频会员卡！【小米电视新品4A 58 火爆预约中】">{{goods.title}}</a> -->
@@ -233,6 +233,7 @@
         this.searchParams.props.splice(index, 1);
         this.getGoodsListInfo();
       },
+      //综合和价格排序切换规则
       changeOrder(orderFlag) {
         // 原始排序标志
         // let originOrderFlag = this.searchParams.order.split(':')[0];
@@ -263,7 +264,7 @@
         goodsListInfo: state => state.search.goodsListInfo,
       }),
       ...mapGetters(['goodsList']),
-      // 未来优化代码可读性
+      // 为了优化代码可读性
       orderFlag() {
         return this.searchParams.order.split(':')[0];
       },
