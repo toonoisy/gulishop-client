@@ -13,7 +13,7 @@ export default [
     component: Home,
   },
   {
-    path: '/search/:keyword?', // params参数需要接收，'?'代表params可传可不传
+    path: '/search/:keyword?', // params参数需要:xxx接收，'?'代表params可传可不传
     component: Search,
     name: 'search',
     // props: true, // 把params当作属性传给相应的组件
@@ -44,7 +44,7 @@ export default [
     redirect: '/home',
   },
   {
-    path: '/detail/:skuId', // 选择一个skuId页面去跳转
+    path: '/detail/:skuId', // 选择一个skuId页面去跳转 // params是路径的一部分，需要:xxx接收
     component: Detail,
   },
   {

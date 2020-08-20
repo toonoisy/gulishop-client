@@ -48,7 +48,7 @@ export const reqGoodsDetailInfo = (skuId) => {
   });
 }
 
-// 请求添加/修改购物车
+// 请求添加/修改购物车 
 export const reqAddOrUpdateCart = (skuId, skuNum) => {
   return Ajax({
     url: `/cart/addToCart/${ skuId }/${ skuNum }`, // 请求路径
@@ -64,3 +64,41 @@ export const reqShopCartList = () => {
 }
 // 对象写法
 // export const reqShopCartList = () => Ajax.get('/cart/cartList');
+
+export const reqUpdateIsChecked = (skuId, isChecked) => {
+  return Ajax({
+    url: `/cart/checkCart/${skuId}/${isChecked}`,
+    method: 'GET',
+  });
+}
+
+// 删除一个购物车数据
+export const reqDeleteItem = (skuId) => {
+  return Ajax({
+    url: `/cart/deleteCart/${skuId}`,
+    method: 'DELETE',
+  });
+}
+
+// 请求注册
+export const reqRegister = (userInfo) => {
+  return Ajax({
+    url: '/user/passport/register',
+    method: 'POST',
+    data: userInfo, // {mobile, password, code}
+  });
+} 
+
+export const reqLogin = (userInfo) => {
+  return Ajax({
+    url: '/user/passport/login',
+    method: 'POST',
+    data: userInfo, // {mobile, password}
+  });
+}
+export const reqLogout = () => {
+  return Ajax({
+    url: '/user/passport/logout',
+    method: 'GET',
+  });
+}

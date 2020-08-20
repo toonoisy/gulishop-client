@@ -30,13 +30,6 @@
       imgList: {
         immediate: true, // 即使数据不改变，也能让回调执行一次（虽然这里没卵用，但是轮播功能代码一致了）
         handler(newVal, oldVal) {
-        /* 
-          watch一旦监视到数据变化就去实例化，不给v-for时间，太快了
-          最终方案：watch + nextTick
-          nextTick: 等待页面最近一次更新完成，会调用它内部的回调
-            dom元素还未形成，但数据想往上面更新，就用nextTick
-              this.$nextTick() / Vue.nextTick() 都可
-        */
           this.$nextTick(() => {
             new Swiper (this.$refs.imgList, {
               // autoplay: true,

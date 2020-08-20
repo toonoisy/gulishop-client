@@ -354,6 +354,7 @@ export default {
     },
     async addShopCart() {
       // 先发请求给后台
+      // 后台返回添加结果
       try {
         await this.$store.dispatch('addOrUpdateCart', {skuId:this.skuInfo.id, skuNum:this.skuNum});
         alert('添加购物车成功，页面将自动跳转');
@@ -365,7 +366,6 @@ export default {
       } catch (err) {
         alert(err.message);
       }
-      // 后台返回添加结果
     },
   },
   computed: {

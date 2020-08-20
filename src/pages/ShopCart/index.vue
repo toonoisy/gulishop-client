@@ -13,7 +13,12 @@
       <div class="cart-body">
         <ul class="cart-list" v-for="item in shopCartList" :key="item.id">
           <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list">
+          <!-- 
+            动态展示checkbox两种方案：
+              - v-model
+              - :checked + @click
+          -->
+            <input type="checkbox" name="chk_list" :checked="item.isChecked === 1" @click="updateOne(item)">
           </li>
           <li class="cart-list-con2">
             <img :src="item.imgUrl">
@@ -26,15 +31,17 @@
             <span class="price">{{item.cartPrice}}</span>
           </li>
           <li class="cart-list-con5">
-            <a href="javascript:void(0)" class="mins" @click="item.skuNum > 1 ? item.skuNum-- : item.skuNum = 1">-</a>
-            <input autocomplete="off" type="text" :value="item.skuNum" minnum="1" class="itxt">
-            <a href="javascript:void(0)" class="plus" @click="item.skuNum++">+</a>
+            <a href="javascript:void(0)" class="mins" @click="updateItemNum(item, -1)">-</a>
+            <!-- change: 一定要有数据改变才触发，blur: 一旦失去焦点就触发 -->
+            <!-- event.target.value本身是个字符串 -->
+            <input autocomplete="off" type="text" :value="item.skuNum" minnum="1" class="itxt" @change="updateItemNum(item, +$event.target.value)">
+            <a href="javascript:void(0)" class="plus" @click="updateItemNum(item, 1)">+</a>
           </li>
           <li class="cart-list-con6">
             <span class="sum">{{item.cartPrice * item.skuNum}}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none" class="sindelet">删除</a>
+            <a href="javascript:;" class="sindelet" @click="deleteOne(item)">删除</a>
             <br>
             <a href="#none">移到收藏</a>
           </li>
@@ -43,20 +50,20 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox">
+        <input class="chooseAll" type="checkbox" v-model="isCheckAll">
         <span>全选</span>
       </div>
       <div class="option">
-        <a href="#none">删除选中的商品</a>
+        <a href="javascript:;" @click="deleteAllChecked">删除选中的商品</a>
         <a href="#none">移到我的关注</a>
         <a href="#none">清除下柜商品</a>
       </div>
       <div class="money-box">
         <div class="chosed">已选择
-          <span>0</span>件商品</div>
+          <span>{{checkedNum}} </span>件商品</div>
         <div class="sumprice">
           <em>总价（不含运费） ：</em>
-          <i class="summoney">0</i>
+          <i class="summoney">{{totalAmount}}</i>
         </div>
         <div class="sumbtn">
           <a class="sum-btn" href="###" target="_blank">结算</a>
@@ -76,13 +83,87 @@
     methods: {
       getShopCartList() {
         this.$store.dispatch('getShopCartList');
+      },
+      // 更新商品数量
+      async updateItemNum(item, modNum) {
+        if (item.skuNum + modNum < 1) {
+          modNum = 1 - item.skuNum; // modNum和原数量相加至少得是1，如果小于1要修正modNum
+        };
+        // 要根据结果去做，所以用async...await + try...catch
+        try {
+          // 发请求去处理数量，返回成功后重新请求数据
+          await this.$store.dispatch('addOrUpdateCart', {skuId:item.skuId, skuNum:modNum});
+          this.getShopCartList();
+        } catch (error) {
+          alert(error.message);
+        }
+      },
+      // 切换单个选中状态
+      async updateOne(item) {
+        try {
+          await this.$store.dispatch('updateIsChecked', {skuId:item.skuId, isChecked: +!item.isChecked}); // 注意isChecked要传的值是数字0/1，取反会变成布尔，要再用一元+转成数字
+          this.getShopCartList();
+        } catch (error) {
+          alert(error.message);
+        }
+      },
+      async deleteOne(item) {
+        try {
+          await this.$store.dispatch('deleteItem', item.skuId)
+          this.getShopCartList();
+        } catch (error) {
+          alert(error.message);
+        }
+      },
+      async deleteAllChecked() {
+        try {
+          await this.$store.dispatch('deleteAllChecked');
+          this.getShopCartList();
+        } catch (error) {
+          alert(error.message);
+        }
       }
+
     },
     computed: {
       ...mapState({
         shopCartList: state => state.shopcart.shopCartList,
       }),
-    }
+      isCheckAll: {
+        get() {
+          return this.shopCartList.every(item => item.isChecked === 1) && this.shopCartList.length > 0; // 所有商品都被选中且列表长度不能为0，返回true
+        },
+        async set(val) {
+          // 一旦状态有变，要让所有选项都修改成最新的val状态（true or false）
+          try {
+            // checkbox默认传true/false，我们要和1/0对应
+            const result = await this.$store.dispatch('updateAllIsChecked', val ? 1: 0);
+            console.log(result);
+            this.getShopCartList();
+          } catch (error) {
+            alert(error.message);
+          }
+        },
+      },
+      // 统计选中商品的数量
+      // 统计用reduce (回调，初始值)
+      checkedNum() {
+        return this.shopCartList.reduce((acc, cur, index) => {
+          if (cur.isChecked === 1) {
+            acc += cur.skuNum;
+          }
+          return acc;
+        }, 0)
+      },
+      totalAmount() {
+        return this.shopCartList.reduce((acc, cur, index) => {
+          if (cur.isChecked === 1) {
+            acc += cur.skuNum * cur.skuPrice;
+          }
+          return acc;
+        }, 0)
+      }
+    },
   }
 </script>
 
