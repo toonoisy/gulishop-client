@@ -56,6 +56,7 @@ export const reqAddOrUpdateCart = (skuId, skuNum) => {
   })
 }
 
+// 请求购物车列表数据
 export const reqShopCartList = () => {
   return Ajax({
     url: '/cart/cartList',
@@ -65,6 +66,7 @@ export const reqShopCartList = () => {
 // 对象写法
 // export const reqShopCartList = () => Ajax.get('/cart/cartList');
 
+// 请求更新单个状态
 export const reqUpdateIsChecked = (skuId, isChecked) => {
   return Ajax({
     url: `/cart/checkCart/${skuId}/${isChecked}`,
@@ -96,9 +98,39 @@ export const reqLogin = (userInfo) => {
     data: userInfo, // {mobile, password}
   });
 }
+
 export const reqLogout = () => {
   return Ajax({
     url: '/user/passport/logout',
+    method: 'GET',
+  });
+}
+
+export const reqTradeInfo = () => {
+  return Ajax({
+    url: '/order/auth/trade',
+    method: 'GET',
+  });
+}
+
+export const reqSubmitOrder = (tradeNo, tradeInfo) => {
+  return Ajax({
+    url: `/order/auth/submitOrder?tradeNo=${tradeNo}`, // tradeNo 交易编号
+    method: 'POST',
+    data: tradeInfo,
+  });
+}
+
+export const reqPaymentInfo = (orderId) => {
+  return Ajax({
+    url: `/payment/weixin/createNative/${orderId}`,
+    method: 'GET',
+  });
+}
+
+export const reqOrderStatus = (orderId) => {
+  return Ajax({
+    url: `/payment/weixin/queryPayStatus/${orderId}`,
     method: 'GET',
   });
 }

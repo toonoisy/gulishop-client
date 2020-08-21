@@ -8,8 +8,8 @@ const state = {
     在state里存一份,而不是直接在mounted中创建，为了方便获取，提高效率
     userTempId必须保存在一个永久保存的地方localStorage，并且尽量不要更改它
   */
- userTempId: getUserTempId(), // 存给ajax用
- userInfo: JSON.parse(localStorage.getItem('USERINFO_KEY')) || {},
+  userTempId: getUserTempId(), // 存给ajax用
+  userInfo: JSON.parse(localStorage.getItem('USERINFO_KEY')) || {},
 };
 const mutations = {
   RECEIVEUSERINFO(state, userInfo) {
@@ -21,7 +21,7 @@ const mutations = {
 };
 
 const actions = {
-  // 如果没有返回数据，直接写请求的action
+  // 如果没有返回数据，就直接写请求的action
   async register(context, userInfo) {
     const result = await reqRegister(userInfo);
     if(result.code === 200) {

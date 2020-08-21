@@ -4,9 +4,16 @@ import router from '@/router';
 import store from '@/store';
 import '@/mock/mockServer';
 import 'swiper/css/swiper.css'; // 公共css样式放main
+import * as API from '@/api';
 
-import '@/api'; // 测试用
+import { MessageBox, Message } from 'element-ui';
+Vue.prototype.$msgbox = MessageBox;
+Vue.prototype.$alert = MessageBox.alert;
+Vue.prototype.$message = Message;
 
+// import '@/api'; // 测试用
+
+// 定义 引入 注册 使用
 import TypeNav from '@/components/TypeNav';
 import Carousel from '@/components/Carousel';
 import Pagination from '@/components/Pagination';
@@ -19,6 +26,7 @@ Vue.config.productionTip = false;
 new Vue({
   beforeCreate() {
     Vue.prototype.$bus = this; // 配置全局事件总线
+    Vue.prototype.$API = API; // 让所有组件对象都能用API对象
   },
   render: h => h(App), // 注册+使用+渲染App组件
   router, 

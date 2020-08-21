@@ -11,11 +11,17 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use(config => {
+  // 处理config(请求报文)，添加额外功能
+  // 进度条开始
   NProgress.start();
-  // 处理config：请求报文/添加额外功能（进度条）
   // 把userTempId添加到每次请求的请求头中
   let userTempId = store.state.user.userTempId;
   config.headers.userTempId = userTempId;
+  // 把登录后的token也添加到请求头
+  let token = store.state.user.userInfo.token;
+  if (token) {
+    config.headers.token = token;
+  }
   return config; // 返回这个config再继续请求，发送对报文信息就是新的config对象
 }); // 内部不涉及this直接用箭头
 

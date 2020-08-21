@@ -14,7 +14,7 @@
         <ul class="cart-list" v-for="item in shopCartList" :key="item.id">
           <li class="cart-list-con1">
           <!-- 
-            动态展示checkbox两种方案：
+            处理checkbox交互两种方案：
               - v-model
               - :checked + @click
           -->
@@ -66,7 +66,8 @@
           <i class="summoney">{{totalAmount}}</i>
         </div>
         <div class="sumbtn">
-          <a class="sum-btn" href="###" target="_blank">结算</a>
+          <router-link to="/trade" class="sum-btn" >结算</router-link>
+          <!-- <a class="sum-btn" href="###" target="_blank">结算</a> -->
         </div>
       </div>
     </div>
@@ -89,7 +90,7 @@
         if (item.skuNum + modNum < 1) {
           modNum = 1 - item.skuNum; // modNum和原数量相加至少得是1，如果小于1要修正modNum
         };
-        // 要根据结果去做，所以用async...await + try...catch
+        // 要根据结果去做处理，所以用async...await + try...catch
         try {
           // 发请求去处理数量，返回成功后重新请求数据
           await this.$store.dispatch('addOrUpdateCart', {skuId:item.skuId, skuNum:modNum});

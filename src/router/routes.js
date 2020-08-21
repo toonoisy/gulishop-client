@@ -5,6 +5,10 @@ import Search from '@/pages/Search';
 import Detail from '@/pages/Detail';
 import AddCartSuccess from '@/pages/AddCartSuccess';
 import ShopCart from '@/pages/ShopCart';
+import Trade from '@/pages/Trade';
+import Pay from '@/pages/Pay';
+import PaySuccess from '@/pages/PaySuccess';
+import Center from '@/pages/Center';
 
 export default [
   // 专门配置各种路由（路径和组件之间都映射关系）
@@ -54,6 +58,22 @@ export default [
   {
     path: '/shopcart', // 前台路由，切换组件
     component: ShopCart,
+  },
+  {
+    path: '/trade', 
+    component: Trade,
+  },
+  {
+    path: '/pay', 
+    component: Pay,
+  },
+  {
+    path: '/paysuccess', 
+    component: PaySuccess,
+  },
+  {
+    path: '/center', 
+    component: Center,
   },
 
 ]; // 复数都是定义数组
