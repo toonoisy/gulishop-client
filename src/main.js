@@ -24,10 +24,10 @@ Vue.use(VueLazyload, { // 内部自定义了一个指令lazy
 // 定义 引入 注册 使用
 import TypeNav from '@/components/TypeNav';
 import Carousel from '@/components/Carousel';
-// import Pagination from '@/components/Pagination';
+import MyPagination from '@/components/MyPagination';
 Vue.component('TypeNav', TypeNav); // 全局注册公共使用的TypeNav组件
 Vue.component('Carousel', Carousel);
-// Vue.component('Pagination', Pagination);
+Vue.component('MyPagination', MyPagination);
 
 Vue.config.productionTip = false;
 

@@ -107,7 +107,9 @@ export default [
     path: '/pay', 
     component: Pay,
     beforeEnter: (to, from, next) => {
-      if (from.path !== '/trade') {
+      if (from.path === '/trade') {
+        next();
+      } else {
         next(false);
       }
     },
@@ -116,9 +118,11 @@ export default [
     path: '/paysuccess', 
     component: PaySuccess,
     beforeEnter: (to, from, next) => {
-      if (from.path !== '/pay') {
+      if (from.path === '/pay') {
+        next();
+      } else {
         next(false);
-      } 
+      }
     },
   },
   {

@@ -110,12 +110,12 @@
 
             </ul>
           </div>
-          <Pagination 
+          <MyPagination 
           :currentPageNum='searchParams.pageNo' 
           :total='goodsListInfo.total'
           :pageSize='searchParams.pageSize'
           :continueSize='5'
-          @changePageNum='changePageNum'></Pagination>
+          @changePageNum='changePageNum'></MyPagination>
         </div>
       </div>
     </div>
