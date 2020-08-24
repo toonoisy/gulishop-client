@@ -134,3 +134,10 @@ export const reqOrderStatus = (orderId) => {
     method: 'GET',
   });
 }
+
+export const reqMyOrderInfo = (page, limit) => {
+  return Ajax({
+    url: `/order/auth/${page}/${limit}`,
+    method: 'GET',
+  })
+}

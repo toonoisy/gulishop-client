@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import routes from '@/router/routes';
+import store from '@/store';
 
 Vue.use(VueRouter); // 声明使用插件（vue官方/自定义插件都需要声明使用）
 
@@ -31,5 +32,29 @@ const router = new VueRouter({
     return { x: 0, y: 0 }
   },
 });
+
+/* 
+  next决定是否放行
+  next()
+  next(false)
+  next('/')
+*/
+
+// 全局前置守卫
+router.beforeEach((to, from, next) => {
+  let targetPath = to.path;
+  if(targetPath.startsWith('/trade') || targetPath.startsWith('/pay') || targetPath.startsWith('/center')) {
+    if(store.state.user.userInfo.name) {
+      // 登录了，放行
+      next();
+    } else {
+      // 没登录，重定向登录页
+      next(`/login?redirect=${targetPath}`);
+    }
+  } else {
+    // 不需要用户登录的放行
+    next();
+  }
+})
 
 export default router;

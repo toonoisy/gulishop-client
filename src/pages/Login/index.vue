@@ -16,16 +16,32 @@
           <div class="content">
             <form action="##">
               <div class="input-text clearFix">
-                <span></span>
-                <input type="text" placeholder="邮箱/用户名/手机号" v-model="mobile">
+                <i></i>
+                <input
+                  v-model="mobile"
+                  name="mobile"
+                  placeholder="邮箱/用户名/手机号"
+                  v-validate="{required: true,regex: /^[1]([3-9])[0-9]{9}$/}"
+                  :class="{invalid: errors.has('mobile')}"
+                />
+                <span class="error-msg">{{ errors.first('mobile') }}</span>
+                <!-- <input type="text" placeholder="邮箱/用户名/手机号" v-model="mobile"> -->
               </div>
               <div class="input-text clearFix">
-                <span class="pwd"></span>
-                <input type="text" placeholder="请输入密码" v-model="password">
+                <i class="pwd"></i>
+                <input
+                  v-model="password"
+                  name="password"
+                  placeholder="请输入密码"
+                  v-validate="{required: true,regex: /^\w{6,20}$/}"
+                  :class="{invalid: errors.has('password')}"
+                />
+                <span class="error-msg">{{ errors.first('password') }}</span>
+                <!-- <input type="text" placeholder="请输入密码" v-model="password"> -->
               </div>
               <div class="setting clearFix">
                 <label class="checkbox inline">
-                  <input name="m1" type="checkbox" value="2" checked="">
+                  <input name="m1" type="checkbox" value="2" checked />
                   自动登录
                 </label>
                 <span class="forget">忘记密码？</span>
@@ -36,10 +52,18 @@
 
             <div class="call clearFix">
               <ul>
-                <li><img src="./images/qq.png" alt=""></li>
-                <li><img src="./images/sina.png" alt=""></li>
-                <li><img src="./images/ali.png" alt=""></li>
-                <li><img src="./images/weixin.png" alt=""></li>
+                <li>
+                  <img src="./images/qq.png" alt />
+                </li>
+                <li>
+                  <img src="./images/sina.png" alt />
+                </li>
+                <li>
+                  <img src="./images/ali.png" alt />
+                </li>
+                <li>
+                  <img src="./images/weixin.png" alt />
+                </li>
               </ul>
               <router-link class="register" to="/register">立即注册</router-link>
             </div>
@@ -60,209 +84,232 @@
         <li>尚品汇社区</li>
       </ul>
       <div class="address">地址：北京市昌平区宏福科技园综合楼6层</div>
-      <div class="beian">京ICP备19006430号
-      </div>
+      <div class="beian">京ICP备19006430号</div>
     </div>
   </div>
 </template>
 
 <script>
-  export default {
-    name: 'Login',
-    data() {
-      return {
-        mobile: '',
-        password: '',
-      }
-    },
-    methods: {
-      async login() {
-        // 收集数据参数，形成参数对象
-        let {mobile, password} = this;
-        if (mobile && password) {
+export default {
+  name: "Login",
+  data() {
+    return {
+      mobile: "",
+      password: "",
+    };
+  },
+  // // 组件内守卫在这个功能用不合适
+  // beforeRouteEnter (to, from, next) {
+  //   // 在渲染该组件的对应路由被 confirm 前调用
+  //   // 不！能！获取组件实例 `this`，因为当守卫执行前，组件实例还没被创建
+  //   next(vm => {
+  //     // 通过 `vm` 访问组件实例
+  //     if (!vm.$store.state.user.userInfo.name) {
+  //       next();
+  //     } else {
+  //       // 登录过了，登录页不让去
+  //       next('/');
+  //     }
+  //   })
+  // },
+  methods: {
+    async login() {
+      // 收集数据参数，形成参数对象
+      let { mobile, password } = this;
+      // if (mobile && password) {
+        const success = await this.$validator.validateAll()
+        if (success) {
           try {
-            await this.$store.dispatch('login', {mobile, password});
-            alert('登录成功，即将跳转');
-            this.$router.push('/');
+            await this.$store.dispatch("login", { mobile, password });
+            alert("登录成功，即将跳转");
+            // 判断登录前是否有被导航守卫拦过
+            let redirectPath = this.$route.query.redirect;
+            if (redirectPath) {
+              // 去到登录前想去的页面
+              this.$router.push(redirectPath);
+            } else {
+              this.$router.push("/");
+            }
           } catch (error) {
             alert(error.message);
           }
         }
-      }
-    }
-  }
+      // }
+    },
+  },
+};
 </script>
 
 <style lang="less" scoped>
-  .login-container {
-    .login-wrap {
+.login-container {
+  .login-wrap {
+    height: 487px;
+    background-color: #e93854;
+
+    .login {
+      width: 1200px;
       height: 487px;
-      background-color: #e93854;
+      margin: 0 auto;
+      background: url(./images/loginbg.png) no-repeat;
+    }
 
-      .login {
-        width: 1200px;
-        height: 487px;
-        margin: 0 auto;
-        background: url(./images/loginbg.png) no-repeat;
-      }
+    .loginform {
+      width: 420px;
+      height: 406px;
+      box-sizing: border-box;
+      background: #fff;
+      float: right;
+      top: 45px;
+      position: relative;
+      padding: 20px;
 
-      .loginform {
-        width: 420px;
-        height: 406px;
-        box-sizing: border-box;
-        background: #fff;
-        float: right;
-        top: 45px;
-        position: relative;
-        padding: 20px;
+      .tab {
+        li {
+          width: 50%;
+          float: left;
+          text-align: center;
 
-        .tab {
+          a {
+            width: 100%;
+            display: block;
+            height: 50px;
+            line-height: 50px;
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+            text-decoration: none;
+          }
 
-          li {
-            width: 50%;
-            float: left;
-            text-align: center;
-
-            a {
-              width: 100%;
-              display: block;
-              height: 50px;
-              line-height: 50px;
-              font-size: 20px;
-              font-weight: 700;
-              color: #333;
-              border: 1px solid #ddd;
-              box-sizing: border-box;
-              text-decoration: none;
-
-            }
-
-            .current {
-              border-bottom: none;
-              border-top-color: #28a3ef;
-              color: #e1251b;
-            }
+          .current {
+            border-bottom: none;
+            border-top-color: #28a3ef;
+            color: #e1251b;
           }
         }
+      }
 
-        .content {
-          width: 380px;
-          height: 316px;
-          box-sizing: border-box;
-          border: 1px solid #ddd;
-          border-top: none;
-          padding: 18px;
+      .content {
+        width: 380px;
+        height: 316px;
+        box-sizing: border-box;
+        border: 1px solid #ddd;
+        border-top: none;
+        padding: 18px;
 
-          form {
-            margin: 15px 0 18px 0;
-            font-size: 12px;
-            line-height: 18px;
+        form {
+          margin: 15px 0 18px 0;
+          font-size: 12px;
+          line-height: 18px;
 
-            .input-text {
-              margin-bottom: 16px;
+          .input-text {
+            margin-bottom: 16px;
 
-              span {
-                float: left;
-                width: 37px;
-                height: 32px;
-                border: 1px solid #ccc;
-                background: url(../../assets/images/icons.png) no-repeat -10px -201px;
-                box-sizing: border-box;
-                border-radius: 2px 0 0 2px;
-              }
-
-              .pwd {
-                background-position: -72px -201px;
-              }
-
-              input {
-                width: 302px;
-                height: 32px;
-                box-sizing: border-box;
-                border: 1px solid #ccc;
-                border-left: none;
-                float: left;
-                padding-top: 6px;
-                padding-bottom: 6px;
-                font-size: 14px;
-                line-height: 22px;
-                padding-right: 8px;
-                padding-left: 8px;
-
-                border-radius: 0 2px 2px 0;
-                outline: none;
-              }
+            .error-msg {
+              color: red;
             }
 
-            .setting {
-              label {
-                float: left;
-              }
-
-              .forget {
-                float: right;
-              }
+            i {
+              float: left;
+              width: 37px;
+              height: 32px;
+              border: 1px solid #ccc;
+              background: url(../../assets/images/icons.png) no-repeat -10px -201px;
+              box-sizing: border-box;
+              border-radius: 2px 0 0 2px;
             }
 
-            .btn {
-              background-color: #e1251b;
-              padding: 6px;
-              border-radius: 0;
-              font-size: 16px;
-              font-family: 微软雅黑;
-              word-spacing: 4px;
-              border: 1px solid #e1251b;
-              color: #fff;
-              width: 100%;
-              height: 36px;
-              margin-top: 25px;
+            .pwd {
+              background-position: -72px -201px;
+            }
+
+            input {
+              width: 302px;
+              height: 32px;
+              box-sizing: border-box;
+              border: 1px solid #ccc;
+              border-left: none;
+              float: left;
+              padding-top: 6px;
+              padding-bottom: 6px;
+              font-size: 14px;
+              line-height: 22px;
+              padding-right: 8px;
+              padding-left: 8px;
+
+              border-radius: 0 2px 2px 0;
               outline: none;
             }
           }
 
-          .call {
-            margin-top: 30px;
-
-            ul {
+          .setting {
+            label {
               float: left;
-
-              li {
-                float: left;
-                margin-right: 5px;
-              }
             }
 
-            .register {
+            .forget {
               float: right;
-              font-size: 15px;
-              line-height: 38px;
-            }
-
-            .register:hover {
-              color: #4cb9fc;
-              text-decoration: underline;
             }
           }
 
+          .btn {
+            background-color: #e1251b;
+            padding: 6px;
+            border-radius: 0;
+            font-size: 16px;
+            font-family: 微软雅黑;
+            word-spacing: 4px;
+            border: 1px solid #e1251b;
+            color: #fff;
+            width: 100%;
+            height: 36px;
+            margin-top: 25px;
+            outline: none;
+          }
+        }
+
+        .call {
+          margin-top: 30px;
+
+          ul {
+            float: left;
+
+            li {
+              float: left;
+              margin-right: 5px;
+            }
+          }
+
+          .register {
+            float: right;
+            font-size: 15px;
+            line-height: 38px;
+          }
+
+          .register:hover {
+            color: #4cb9fc;
+            text-decoration: underline;
+          }
         }
       }
     }
-
-    .copyright {
-      width: 1200px;
-      margin: 0 auto;
-      text-align: center;
-      line-height: 24px;
-
-      ul {
-        li {
-          display: inline-block;
-          border-right: 1px solid #e4e4e4;
-          padding: 0 20px;
-          margin: 15px 0;
-        }
-      }
-    }
-
   }
+
+  .copyright {
+    width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+    line-height: 24px;
+
+    ul {
+      li {
+        display: inline-block;
+        border-right: 1px solid #e4e4e4;
+        padding: 0 20px;
+        margin: 15px 0;
+      }
+    }
+  }
+}
 </style>

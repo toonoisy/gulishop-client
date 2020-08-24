@@ -1,14 +1,29 @@
-import Home from '@/pages/Home';
-import Login from '@/pages/Login';
-import Register from '@/pages/Register';
-import Search from '@/pages/Search';
-import Detail from '@/pages/Detail';
-import AddCartSuccess from '@/pages/AddCartSuccess';
-import ShopCart from '@/pages/ShopCart';
-import Trade from '@/pages/Trade';
-import Pay from '@/pages/Pay';
-import PaySuccess from '@/pages/PaySuccess';
+const Home = () => import('@/pages/Home'); // home是函数
+const Login = () => import('@/pages/Login'); 
+const Register = () => import('@/pages/Register'); 
+const Search = () => import('@/pages/Search'); 
+const Detail = () => import('@/pages/Detail'); 
+const AddCartSuccess = () => import('@/pages/AddCartSuccess'); 
+const ShopCart = () => import('@/pages/ShopCart'); 
+const Trade = () => import('@/pages/Trade'); 
+const Pay = () => import('@/pages/Pay'); 
+const PaySuccess = () => import('@/pages/PaySuccess'); 
+
+
+// import Home from '@/pages/Home'; // home是对象
+// import Login from '@/pages/Login';
+// import Register from '@/pages/Register';
+// import Search from '@/pages/Search';
+// import Detail from '@/pages/Detail';
+// import AddCartSuccess from '@/pages/AddCartSuccess';
+// import ShopCart from '@/pages/ShopCart';
+// import Trade from '@/pages/Trade';
+// import Pay from '@/pages/Pay';
+// import PaySuccess from '@/pages/PaySuccess';
 import Center from '@/pages/Center';
+import MyOrder from '@/pages/Center/MyOrder';
+import GroupOrder from '@/pages/Center/GroupOrder';
+import store from '@/store';
 
 export default [
   // 专门配置各种路由（路径和组件之间都映射关系）
@@ -35,6 +50,15 @@ export default [
     meta: {
       isHide: true // 说明要隐藏footer
     },
+    // 路由独享守卫
+    beforeEnter: (to, from, next) => {
+      if (!store.state.user.userInfo.name) {
+        next();
+      } else {
+        // 登录过了，登录页不让去
+        next(false);
+      }
+    },
   },
   {
     path: '/register',
@@ -54,6 +78,15 @@ export default [
   {
     path: '/addcartsuccess', // 前台路由，切换组件
     component: AddCartSuccess,
+    // 只有携带了skuNum和sessionStorage内部有skuInfo数据，才能看到添加购物车成功的界面
+    beforeEnter: (to, from, next) => {
+      let skuInfo = sessionStorage.getItem('SKUINFO_KEY');
+      if (to.query.skuNum && skuInfo) {
+        next();
+      } else {
+        next(false);
+      }
+    },
   },
   {
     path: '/shopcart', // 前台路由，切换组件
@@ -62,18 +95,49 @@ export default [
   {
     path: '/trade', 
     component: Trade,
+    beforeEnter: (to, from, next) => {
+      if (from.path === '/shopcart') {
+        next();
+      } else {
+        next(false);
+      }
+    },
   },
   {
     path: '/pay', 
     component: Pay,
+    beforeEnter: (to, from, next) => {
+      if (from.path !== '/trade') {
+        next(false);
+      }
+    },
   },
   {
     path: '/paysuccess', 
     component: PaySuccess,
+    beforeEnter: (to, from, next) => {
+      if (from.path !== '/pay') {
+        next(false);
+      } 
+    },
   },
   {
     path: '/center', 
     component: Center,
+    children: [
+      {
+        path: 'myorder',
+        component: MyOrder,
+      },
+      {
+        path: 'grouporder',
+        component: GroupOrder,
+      },
+      {
+        path: '',
+        redirect: 'myorder',
+      },
+    ]
   },
 
 ]; // 复数都是定义数组
