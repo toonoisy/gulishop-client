@@ -7,11 +7,12 @@ import 'swiper/css/swiper.css'; // 公共css样式放main
 import * as API from '@/api';
 import './validate';
 
-import { MessageBox, Message, Pagination } from 'element-ui';
+import { MessageBox, Message, Pagination, Button } from 'element-ui';
 Vue.prototype.$msgbox = MessageBox;
 Vue.prototype.$alert = MessageBox.alert;
 Vue.prototype.$message = Message;
 Vue.use(Pagination);
+Vue.use(Button);
 
 import VueLazyload from 'vue-lazyload';
 import loading from '@/assets/images/loading.gif';

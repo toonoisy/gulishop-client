@@ -28,7 +28,7 @@
         <input
           v-model="code"
           name="code"
-          v-validate="{required: true,regex: /^[0-9]{4}$/}"
+          v-validate="{required: true,regex: /^\d{4}$/}"
           :class="{invalid: errors.has('code')}"
           placeholder="请输入验证码"
         />

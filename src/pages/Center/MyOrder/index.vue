@@ -40,6 +40,7 @@
                   <a href="#" class="service">售后申请</a>
                 </div>
               </td>
+              <!-- template标签不会影响页面结构样式，可以把要统一处理的元素包起来 -->
               <template v-if="index === 0">
                 <td :rowspan="order.orderDetailList.length" width="8%" class="center">{{order.consignee}}</td>
                 <td :rowspan="order.orderDetailList.length" width="13%" class="center">
